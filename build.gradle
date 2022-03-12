@@ -36,7 +36,7 @@ java {
 
 tasks {
     dockerfileNative {
-      args("-XX:MaximumHeapSizePercent=80 -Xmx7000m")
+      args("-XX:MaximumHeapSizePercent=80")
       baseImage('gcr.io/distroless/cc-debian10')
     }
     dockerBuild {
