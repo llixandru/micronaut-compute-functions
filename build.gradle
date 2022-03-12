@@ -1,0 +1,65 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.1"
+    id("io.micronaut.application") version "3.2.2"
+}
+
+version = "0.2"
+group = "example.micronaut"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation("com.oracle.oci.sdk:oci-java-sdk-core")
+    runtimeOnly("org.slf4j:slf4j-simple")
+    compileOnly("org.graalvm.nativeimage:svm")
+
+    implementation("io.micronaut:micronaut-validation")
+
+    testImplementation("io.micronaut:micronaut-http-client")
+
+}
+
+
+application {
+    mainClass.set("example.micronaut.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("11")
+    targetCompatibility = JavaVersion.toVersion("11")
+}
+
+tasks {
+    dockerfileNative {
+      args("-XX:MaximumHeapSizePercent=80 -Xmx7000m")
+      baseImage('gcr.io/distroless/cc-debian10')
+    }
+    dockerBuild {
+        images = ["fra.ocir.io/frsxwtjslf35/liana.lixandru/functions-samples/$project.name:$project.version"]
+    }
+
+    dockerBuildNative {
+        images = ["fra.ocir.io/frsxwtjslf35/liana.lixandru/functions-samples/$project.name-native:$project.version"]
+    }
+}
+graalvmNative.toolchainDetection = false
+graalvmNative {
+    binaries.configureEach {
+        buildArgs.add("--initialize-at-build-time=example.micronaut")
+    }
+}
+micronaut {
+    runtime("oracle_function")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("example.micronaut.*")
+    }
+}
+
+

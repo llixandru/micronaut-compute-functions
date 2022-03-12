@@ -1,0 +1,4 @@
+micronaut:
+  application:
+    name: micronautcompute
+oci.config.profile: DEFAULT
