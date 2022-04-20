@@ -40,11 +40,11 @@ tasks {
       baseImage('gcr.io/distroless/cc-debian10')
     }
     dockerBuild {
-        images = ["fra.ocir.io/frsxwtjslf35/liana.lixandru/functions-samples/$project.name:$project.version"]
+        images = ["fra.ocir.io/fr1wb0c6sbky/liana.lixandru/micronaut/$project.name:$project.version"]
     }
 
     dockerBuildNative {
-        images = ["fra.ocir.io/frsxwtjslf35/liana.lixandru/functions-samples/$project.name-native:$project.version"]
+        images = ["fra.ocir.io/fr1wb0c6sbky/liana.lixandru/micronaut/$project.name-native:$project.version"]
     }
 }
 graalvmNative.toolchainDetection = false
